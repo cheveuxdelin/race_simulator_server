@@ -1,8 +1,11 @@
 from flask import Flask,render_template,request, url_for,send_from_directory
 import predictor
 import pandas as pd 
+from flask_cors import CORS
+import json
 
 app = Flask(__name__)
+CORS(app)
 
 active_drivers = [['Daniel Ricciardo','McLaren'], 
                   ['Mick Schumacher','Haas F1 Team'], 
@@ -48,12 +51,14 @@ def predict_position():
     df = pd.DataFrame(res, columns = ['Driver','Constructor','podium', 'driver_confidence', 'constructor_reliability', 'Prediction'] )
     # Filter only Drivers with Podium probability
     df1 = df[df['podium']==1]
-    df1 = df1.sort_values(['Prediction'], ascending=False).head(5)
-    if len(df1) < 5 :
-        df2 = df[df['podium']==2]
-        df2 = df2.sort_values(['Prediction'], ascending=False).head(5-len(df1))
-        df1 = df1.append(df2)
-    df1 = df1.drop(['Constructor', 'Prediction'],1)
+    print("dedo", df1)
+
+    # df1 = df1.sort_values(['Prediction'], ascending=False).head(5)
+    # if len(df1) < 5 :
+    #     df2 = df[df['podium']==2]
+    #     df2 = df2.sort_values(['Prediction'], ascending=False).head(5-len(df1))
+    #     df1 = df1.append(df2)
+    # df1 = df1.drop(['Constructor', 'Prediction'],1)
     
     return render_template('index.html',tables=[df1.to_html(classes='driver')])
 
