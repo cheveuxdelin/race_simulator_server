@@ -57,8 +57,9 @@ def predict_position():
         df2 = df2.sort_values(['Prediction'], ascending=False).head(5-len(df1))
         result = pd.concat([df1, df2], ignore_index=True)
 
-    result = result.drop(['Prediction'], axis=1)
-    return Response(result.to_json(), status=200)
+    result = result.rename(columns={"Driver": "name", "Constructor": "constructor"})
+
+    return Response(result.to_json(orient="records"), status=200)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8443, debug=True, ssl_context='adhoc')
