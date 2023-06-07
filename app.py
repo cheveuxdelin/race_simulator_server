@@ -25,15 +25,6 @@ active_drivers = [['Daniel Ricciardo','McLaren'],
                   ['Nikita Mazepin','Haas F1 Team'],
                   ['Nicholas Latifi','Williams']]
 
-
-@app.route("/images/<path:path>")
-def static_dir(path):
-    return send_from_directory("images", path)
-
-@app.route('/')
-def get_input():
-    return render_template('index.html')
-
 @app.route('/predict',methods=['POST'])
 def predict_position():
     circuit = request.form['circuit']
